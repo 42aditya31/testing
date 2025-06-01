@@ -65,23 +65,44 @@ function generateVerificationCode(): string {
     return str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 }
 
+// function subscribeEmail(string $email): bool {
+//     $file = __DIR__ . '/pending_subscriptions.txt';
+//     $code = generateVerificationCode();
+
+//     $lines = file_exists($file) ? file($file, FILE_IGNORE_NEW_LINES) : [];
+//     foreach ($lines as $line) {
+//         [$e] = explode('|', $line);
+//         if (strcasecmp($e, $email) === 0) return false;
+//     }
+
+//     file_put_contents($file, $email . '|' . $code . PHP_EOL, FILE_APPEND);
+
+//     $link = 'http://' . $_SERVER['HTTP_HOST'] . '/src/verify.php?email=' . urlencode($email) . '&code=' . urlencode($code);
+//     $body = "<p>Click the link below to verify your subscription to Task Planner:</p>
+// <p><a id=\"verification-link\" href=\"$link\">Verify Subscription</a></p>";
+
+//     $headers = "MIME-Version: 1.0\r\n";
+//     $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+//     $headers .= "From: no-reply@example.com\r\n";
+
+//     return mail($email, 'Verify subscription to Task Planner', $body, $headers);
+// }
+
+
 function subscribeEmail(string $email): bool {
+    // TODO: Implement this function
     $file = __DIR__ . '/pending_subscriptions.txt';
-    $code = generateVerificationCode();
-
-    $lines = file_exists($file) ? file($file, FILE_IGNORE_NEW_LINES) : [];
-    foreach ($lines as $line) {
-        [$e] = explode('|', $line);
-        if (strcasecmp($e, $email) === 0) return false;
-    }
-
-    file_put_contents($file, $email . '|' . $code . PHP_EOL, FILE_APPEND);
-
-    $link = 'http://' . $_SERVER['HTTP_HOST'] . '/src/verify.php?email=' . urlencode($email) . '&code=' . urlencode($code);
-    $body = "<p>Click the link below to verify your subscription to Task Planner:</p>
-<p><a id=\"verification-link\" href=\"$link\">Verify Subscription</a></p>";
-    return mail($email, 'Verify subscription to Task Planner', $body, "Content-Type: text/html\r\nFrom: no-reply@example.com");
+        $code = generateVerificationCode();
+    $subject = "Your Verification Code";
+    $message = "<p>Your verification code is: </p>";
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8\r\n";
+    $headers .= "From: no-reply@example.com\r\n";
+    return mail($email, $subject, $message, $headers);
 }
+
+
+
 
 function verifySubscription(string $email, string $code): bool {
     $pending_file = __DIR__ . '/pending_subscriptions.txt';
