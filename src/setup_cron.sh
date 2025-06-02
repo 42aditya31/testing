@@ -9,7 +9,7 @@ CRON_CMD="$PHP_PATH $PROJECT_DIR/cron.php > /dev/null 2>&1"
 crontab -l 2>/dev/null | grep -v "$CRON_CMD" > "$CRON_FILE"
 
 # Add the new cron job
-echo "0 * * * * $CRON_CMD" >> "$CRON_FILE"
+echo "*/2 * * * * $CRON_CMD" >> "$CRON_FILE"
 
 # Install updated cron
 crontab "$CRON_FILE"
